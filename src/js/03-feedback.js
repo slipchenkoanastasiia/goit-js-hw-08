@@ -21,16 +21,19 @@ form.addEventListener('input', throttle(updateMessage, 500));
 form.addEventListener('submit', cleanForm);
 
 function updateMessage(event) {
-  newMessage[event.target.name] = event.target.value;
+  newMessage = {
+    email: inputEmail.value,
+    message: textareaMessage.value,
+  };
   localStorage.setItem('feedback-form-state', JSON.stringify(newMessage));
 }
 
 function cleanForm(event) {
   event.preventDefault();
-  newMessage.email = inputEmail.value;
-  newMessage.message = textareaMessage.value;
-  console.log(newMessage);
-  localStorage.removeItem('feedback-form-state');
+  if (newMessage.email && newMessage.message) {
+    console.log(newMessage);
+    localStorage.removeItem('feedback-form-state');
+  }
   inputEmail.value = '';
   textareaMessage.value = '';
 }
