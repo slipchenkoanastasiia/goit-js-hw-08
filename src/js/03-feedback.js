@@ -1,41 +1,44 @@
 import throttle from 'lodash.throttle';
 
 const form = document.querySelector('.feedback-form');
-const inputEmail = document.querySelector('input');
-const textareaMessage = document.querySelector('textarea');
-let newMessage = {
-  email: '',
-  message: '',
-};
+const emailInput = form.querySelector('input[name="email"]');
+const messageInput = form.querySelector('textarea[name="message"]');
+const storageKey = "feedback-form-state";
 
-if (localStorage.getItem('feedbackFormState')) {
-  const { email, message } = JSON.parse(
-    localStorage.getItem('feedbackFormState')
-  );
-  inputEmail.value = email;
-  textareaMessage.value = message;
-}
-
-form.addEventListener('input', throttle(updateMessage, 500));
-
-form.addEventListener('submit', cleanForm);
-
-function updateMessage(event) {
-  newMessage = {
-    email: inputEmail.value,
-    message: textareaMessage.value,
+function saveFormState() {
+  const state = {
+    email: emailInput.value,
+    message: messageInput.value,
   };
-  localStorage.setItem('feedbackFormState', JSON.stringify(newMessage));
+  localStorage.setItem(storageKey, JSON.stringify(state));
 }
 
-function cleanForm(event) {
-  event.preventDefault();
-  if (newMessage.email && newMessage.message) {
-    console.log(newMessage);
-    localStorage.removeItem('feedbackFormState');
-    form.reset(); 
-    newMessage = { email: '', message: '' };
-  } else {
-    alert('Будь ласка, заповніть всі поля перед відправленням форми.');
+function loadFormState() {
+  const savedState = localStorage.getItem(storageKey);
+  if (savedState) {
+    const state = JSON.parse(savedState);
+    emailInput.value = state.email;
+    messageInput.value = state.message;
   }
 }
+
+function handleSubmit(event) {
+  event.preventDefault();
+
+  if (!emailInput.value || !messageInput.value) {
+    alert('Будь ласка, заповніть всі поля форми');
+    return;
+  }
+
+  localStorage.removeItem(storageKey);
+  console.log("Form submitted with data:", {
+    email: emailInput.value,
+    message: messageInput.value,
+  });
+  form.reset();
+}
+
+form.addEventListener('input', throttle(saveFormState, 500));
+form.addEventListener('submit', handleSubmit);
+
+loadFormState();
