@@ -8,9 +8,9 @@ let newMessage = {
   message: '',
 };
 
-if (localStorage.getItem('feedback-form-state')) {
+if (localStorage.getItem('feedbackFormState')) {
   const { email, message } = JSON.parse(
-    localStorage.getItem('feedback-form-state')
+    localStorage.getItem('feedbackFormState')
   );
   inputEmail.value = email;
   textareaMessage.value = message;
@@ -25,14 +25,14 @@ function updateMessage(event) {
     email: inputEmail.value,
     message: textareaMessage.value,
   };
-  localStorage.setItem('feedback-form-state', JSON.stringify(newMessage));
+  localStorage.setItem('feedbackFormState', JSON.stringify(newMessage));
 }
 
 function cleanForm(event) {
   event.preventDefault();
   if (newMessage.email && newMessage.message) {
     console.log(newMessage);
-    localStorage.removeItem('feedback-form-state');
+    localStorage.removeItem('feedbackFormState');
     form.reset(); 
     newMessage = { email: '', message: '' };
   } else {
