@@ -3,7 +3,7 @@ import throttle from 'lodash.throttle';
 const form = document.querySelector('.feedback-form');
 const inputEmail = document.querySelector('input');
 const textareaMessage = document.querySelector('textarea');
-const newMessage = {
+let newMessage = {
   email: '',
   message: '',
 };
@@ -33,7 +33,7 @@ function cleanForm(event) {
   if (newMessage.email && newMessage.message) {
     console.log(newMessage);
     localStorage.removeItem('feedback-form-state');
+    form.reset(); 
+    newMessage = { email: '', message: '' };
   }
-  inputEmail.value = '';
-  textareaMessage.value = '';
 }
