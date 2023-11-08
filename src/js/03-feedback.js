@@ -35,5 +35,7 @@ function cleanForm(event) {
     localStorage.removeItem('feedback-form-state');
     form.reset(); 
     newMessage = { email: '', message: '' };
+  } else {
+    alert('Будь ласка, заповніть всі поля перед відправленням форми.');
   }
 }
